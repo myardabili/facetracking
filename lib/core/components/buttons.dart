@@ -12,7 +12,7 @@ class Button extends StatelessWidget {
     this.color = AppColors.primary,
     this.textColor = Colors.white,
     this.width = double.infinity,
-    this.height = 60.0,
+    this.height = 50.0,
     this.borderRadius = 18.0,
     this.icon,
     this.suffixIcon,

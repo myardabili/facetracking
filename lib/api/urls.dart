@@ -1,3 +1,3 @@
 class URLs {
-  static const base = 'http://192.168.221.105:8000';
+  static const base = 'https://d98c-103-162-62-225.ngrok-free.app';
 }

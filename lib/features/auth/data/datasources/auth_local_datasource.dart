@@ -26,6 +26,7 @@ class AuthLocalDatasource {
 
   Future<bool> isAuth() async {
     final pref = await SharedPreferences.getInstance();
-    return pref.containsKey(key);
+    final data = pref.getString(key);
+    return data != null;
   }
 }

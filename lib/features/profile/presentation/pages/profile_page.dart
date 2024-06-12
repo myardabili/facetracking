@@ -1,3 +1,4 @@
+import 'package:facetracking/core/extensions/build_context_ext.dart';
 import 'package:facetracking/features/auth/presentation/bloc/logout/logout_bloc.dart';
 import 'package:facetracking/features/auth/presentation/pages/login_page.dart';
 import 'package:flutter/material.dart';
@@ -27,12 +28,12 @@ class _ProfilePageState extends State<ProfilePage> {
             }
             if (state is LogoutLoaded) {
               AuthLocalDatasource().removeAuthData();
-              // context.pushReplacement(const LoginPage());
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const LoginPage(),
-                  ));
+              context.pushReplacement(const LoginPage());
+              // Navigator.pushReplacement(
+              //     context,
+              //     MaterialPageRoute(
+              //       builder: (context) => const LoginPage(),
+              //     ));
             }
           },
           builder: (context, state) {
