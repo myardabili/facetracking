@@ -1,6 +1,8 @@
 import 'package:facetracking/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:facetracking/features/auth/presentation/bloc/logout/logout_bloc.dart';
 import 'package:facetracking/features/auth/presentation/pages/splash_page.dart';
+import 'package:facetracking/features/home/data/datasources/register_face_datasource.dart';
+import 'package:facetracking/features/home/presentation/bloc/register_face/register_face_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -22,6 +24,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => LogoutBloc(AuthRemoteDatasource()),
+        ),
+        BlocProvider(
+          create: (context) => RegisterFaceBloc(RegisterFaceDatasource()),
         ),
       ],
       child: MaterialApp(

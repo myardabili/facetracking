@@ -1,9 +1,9 @@
-import 'package:facetracking/features/home/pages/home_page.dart';
+import 'package:facetracking/features/home/presentation/pages/home_page.dart';
 import 'package:facetracking/features/profile/presentation/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 
-import '../../../core/assets/assets.gen.dart';
-import '../../../core/constants/colors.dart';
+import '../../../../core/assets/assets.gen.dart';
+import '../../../../core/constants/colors.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});

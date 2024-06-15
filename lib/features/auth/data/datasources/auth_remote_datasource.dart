@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dartz/dartz.dart';
 import 'package:facetracking/api/urls.dart';
 import 'package:facetracking/features/auth/data/datasources/auth_local_datasource.dart';
@@ -7,13 +9,17 @@ import 'package:http/http.dart' as http;
 class AuthRemoteDatasource {
   Future<Either<String, LoginModel>> login(
       String email, String password) async {
-    const url = '${URLs.base}/api/login';
+    final url = Uri.parse('${URLs.base}/api/login');
     final response = await http.post(
-      Uri.parse(url),
-      body: {
+      url,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
         'email': email,
         'password': password,
-      },
+      }),
     );
     if (response.statusCode == 200) {
       return Right(LoginModel.fromJson(response.body));
@@ -29,6 +35,7 @@ class AuthRemoteDatasource {
       url,
       headers: {
         'Accept': 'application/json',
+        'Content-Type': 'application/json',
         'Authorization': 'Bearer ${authData?.token}',
       },
     );

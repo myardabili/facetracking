@@ -2,7 +2,7 @@ import 'package:facetracking/core/components/cicle_loading.dart';
 import 'package:facetracking/core/extensions/build_context_ext.dart';
 import 'package:facetracking/features/auth/data/datasources/auth_local_datasource.dart';
 import 'package:facetracking/features/auth/presentation/bloc/login/login_bloc.dart';
-import 'package:facetracking/features/home/pages/dashboard_page.dart';
+import 'package:facetracking/features/home/presentation/pages/dashboard_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

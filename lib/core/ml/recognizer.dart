@@ -1,18 +1,17 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
 
-import 'package:facetracking/features/auth/data/datasources/auth_local_datasource.dart';
-import 'package:image/image.dart' as img;
-import 'package:tflite_flutter/tflite_flutter.dart';
-
 import 'package:facetracking/core/ml/recognition_embedding.dart';
+import 'package:tflite_flutter/tflite_flutter.dart';
+import 'package:image/image.dart' as img;
+
+import '../../features/auth/data/datasources/auth_local_datasource.dart';
 
 class Recognizer {
   late Interpreter interpreter;
   late InterpreterOptions _interpreterOptions;
-  static const int WIDHT = 112;
+  static const int WIDTH = 112;
   static const int HEIGHT = 112;
 
   String get modelName => 'assets/mobile_face_net.tflite';
@@ -36,7 +35,7 @@ class Recognizer {
 
   List<dynamic> imageToArray(img.Image inputImage) {
     img.Image resizedImage =
-        img.copyResize(inputImage, width: WIDHT, height: HEIGHT);
+        img.copyResize(inputImage, width: WIDTH, height: HEIGHT);
     List<double> flattenedList = resizedImage.data!
         .expand((channel) => [channel.r, channel.g, channel.b])
         .map((value) => value.toDouble())
@@ -44,14 +43,14 @@ class Recognizer {
     Float32List float32Array = Float32List.fromList(flattenedList);
     int channels = 3;
     int height = HEIGHT;
-    int widht = WIDHT;
-    Float32List reshapedArray = Float32List(1 * height * widht * channels);
+    int width = WIDTH;
+    Float32List reshapedArray = Float32List(1 * height * width * channels);
     for (int c = 0; c < channels; c++) {
       for (int h = 0; h < height; h++) {
-        for (int w = 0; w < widht; w++) {
-          int index = c * height * widht + h * widht + w;
+        for (int w = 0; w < width; w++) {
+          int index = c * height * width + h * width + w;
           reshapedArray[index] =
-              (float32Array[c * height * widht + h * widht + w] - 127.5) /
+              (float32Array[c * height * width + h * width + w] - 127.5) /
                   127.5;
         }
       }
@@ -60,27 +59,27 @@ class Recognizer {
   }
 
   RecognitionEmbedding recognize(img.Image image, Rect location) {
-    //crop face from image resize it and convert it to float array
+    //TODO crop face from image resize it and convert it to float array
     var input = imageToArray(image);
     print(input.shape.toString());
 
-    //output array
+    //TODO output array
     List output = List.filled(1 * 192, 0).reshape([1, 192]);
 
-    //performs interface
+    //TODO performs inference
     final runs = DateTime.now().millisecondsSinceEpoch;
     interpreter.run(input, output);
-    final run = DateTime.now().microsecondsSinceEpoch - runs;
-    print('Time to run interface: $run ms$output');
+    // final run = DateTime.now().millisecondsSinceEpoch - runs;
+    // print('Time to run inference: $run ms$output');
 
-    //convert dynamic list to double list
+    //TODO convert dynamic list to double list
     List<double> outputArray = output.first.cast<double>();
 
-    return RecognitionEmbedding(location: location, embedding: outputArray);
+    return RecognitionEmbedding(location, outputArray);
   }
 
   PairEmbedding findNearest(List<double> emb, List<double> authFaceEmbedding) {
-    PairEmbedding pair = PairEmbedding(distance: -5);
+    PairEmbedding pair = PairEmbedding(-5);
 
     double distance = 0;
     for (int i = 0; i < emb.length; i++) {
@@ -91,6 +90,7 @@ class Recognizer {
     if (pair.distance == -5 || distance < pair.distance) {
       pair.distance = distance;
     }
+    //}
     return pair;
   }
 
@@ -104,7 +104,7 @@ class Recognizer {
             .map((e) => double.parse(e))
             .toList()
             .cast<double>());
-    print('distance = ${pair.distance}');
+    print("distance= ${pair.distance}");
     if (pair.distance < 1.0) {
       return true;
     }
@@ -114,7 +114,5 @@ class Recognizer {
 
 class PairEmbedding {
   double distance;
-  PairEmbedding({
-    required this.distance,
-  });
+  PairEmbedding(this.distance);
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../core/components/components.dart';
-import '../../../core/constants/colors.dart';
+import '../../../../core/components/spaces.dart';
+import '../../../../core/constants/colors.dart';
 
 class MenuButton extends StatelessWidget {
   final String label;

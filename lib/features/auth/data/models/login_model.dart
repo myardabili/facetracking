@@ -23,6 +23,16 @@ class LoginModel {
         "user": user?.toMap(),
         "token": token,
       };
+
+  LoginModel copyWith({
+    User? user,
+    String? token,
+  }) {
+    return LoginModel(
+      user: user ?? this.user,
+      token: token ?? this.token,
+    );
+  }
 }
 
 class User {
@@ -35,10 +45,10 @@ class User {
   final dynamic twoFactorConfirmedAt;
   final DateTime? createdAt;
   final DateTime? updatedAt;
-  final String? phone;
+  final dynamic phone;
   final String? role;
-  final String? position;
-  final String? department;
+  final dynamic position;
+  final dynamic department;
   final dynamic faceEmbedding;
   final dynamic imageUrl;
 
