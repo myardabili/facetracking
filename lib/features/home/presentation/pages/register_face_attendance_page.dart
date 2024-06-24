@@ -46,10 +46,10 @@ class _RegisterFaceAttendencePageState
 
   late List<RecognitionEmbedding> recognitions = [];
 
-  //TODO declare face detectore
+  //declare face detectore
   late FaceDetector detector;
 
-  //TODO declare face recognizer
+  //declare face recognizer
   late Recognizer recognizer;
 
   bool isBusy = false;
@@ -75,11 +75,11 @@ class _RegisterFaceAttendencePageState
   void initState() {
     super.initState();
 
-//TODO initialize face detector
+    //initialize face detector
     detector = FaceDetector(
         options: FaceDetectorOptions(performanceMode: FaceDetectorMode.fast));
 
-    //TODO initialize face recognizer
+    //initialize face recognizer
     recognizer = Recognizer();
 
     _initializeCamera();
@@ -201,27 +201,27 @@ class _RegisterFaceAttendencePageState
   performFaceRecognition(List<Face> faces) async {
     recognitions.clear();
 
-    //TODO convert CameraImage to Image and rotate it so that our frame will be in a portrait
+    //convert CameraImage to Image and rotate it so that our frame will be in a portrait
     image = convertYUV420ToImage(frame!);
     image = img.copyRotate(image!,
         angle: camDirec == CameraLensDirection.front ? 270 : 90);
 
     for (Face face in faces) {
       Rect faceRect = face.boundingBox;
-      //TODO crop face
+      //crop face
       img.Image croppedFace = img.copyCrop(image!,
           x: faceRect.left.toInt(),
           y: faceRect.top.toInt(),
           width: faceRect.width.toInt(),
           height: faceRect.height.toInt());
 
-      //TODO pass cropped face to face recognition model
+      //pass cropped face to face recognition model
       RecognitionEmbedding recognition =
           recognizer.recognize(croppedFace, face.boundingBox);
 
       recognitions.add(recognition);
 
-      //TODO show face registration dialogue
+      //show face registration dialogue
       if (register) {
         showFaceRegistrationDialogue(
           croppedFace,

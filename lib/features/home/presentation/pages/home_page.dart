@@ -1,5 +1,8 @@
+import 'package:facetracking/api/urls.dart';
 import 'package:facetracking/core/extensions/build_context_ext.dart';
 import 'package:facetracking/core/extensions/date_time_ext.dart';
+import 'package:facetracking/features/home/presentation/pages/attendance_checkin_page.dart';
+import 'package:facetracking/features/home/presentation/pages/attendance_checkout_page.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/assets/assets.gen.dart';
 import '../../../../core/components/buttons.dart';
@@ -58,24 +61,54 @@ class _HomePageState extends State<HomePage> {
             children: [
               Row(
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(50.0),
-                    child: Image.network(
-                      'https://i.pinimg.com/originals/1b/14/53/1b14536a5f7e70664550df4ccaa5b231.jpg',
-                      width: 48.0,
-                      height: 48.0,
-                      fit: BoxFit.cover,
-                    ),
+                  FutureBuilder(
+                    future: AuthLocalDatasource().getAuthData(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData &&
+                          snapshot.data?.user?.imageUrl != null) {
+                        // Mengatur URL gambar yang akan digunakan
+                        String imageUrl = snapshot.data!.user!.imageUrl!
+                                .contains('http')
+                            ? snapshot.data!.user!.imageUrl!
+                            : '${URLs.imageUrl}${snapshot.data!.user!.imageUrl!}';
+
+                        return ClipRRect(
+                          borderRadius: BorderRadius.circular(50.0),
+                          child: Image.network(
+                            imageUrl,
+                            width: 48.0,
+                            height: 48.0,
+                            fit: BoxFit.cover,
+                          ),
+                        );
+                      } else {
+                        // Tampilkan gambar default jika tidak ada data atau imageUrl null
+                        return ClipRRect(
+                          borderRadius: BorderRadius.circular(50.0),
+                          child: Image.network(
+                            'https://i.pinimg.com/originals/1b/14/53/1b14536a5f7e70664550df4ccaa5b231.jpg',
+                            width: 48.0,
+                            height: 48.0,
+                            fit: BoxFit.cover,
+                          ),
+                        );
+                      }
+                    },
                   ),
                   const SpaceWidth(12.0),
-                  const Expanded(
-                    child: Text(
-                      'Hello, Chopper Sensei',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        color: AppColors.white,
-                      ),
-                      maxLines: 2,
+                  Expanded(
+                    child: FutureBuilder(
+                      future: AuthLocalDatasource().getAuthData(),
+                      builder: (context, snapshot) {
+                        return Text(
+                          'Hello, ${snapshot.data?.user?.name ?? '-'}',
+                          style: const TextStyle(
+                            fontSize: 18.0,
+                            color: AppColors.white,
+                          ),
+                          maxLines: 2,
+                        );
+                      },
                     ),
                   ),
                   IconButton(
@@ -145,12 +178,16 @@ class _HomePageState extends State<HomePage> {
                     MenuButton(
                       label: 'Datang',
                       iconPath: Assets.icons.menu.datang.path,
-                      onPressed: () {},
+                      onPressed: () {
+                        context.push(const AttendanceCheckinPage());
+                      },
                     ),
                     MenuButton(
                       label: 'Pulang',
                       iconPath: Assets.icons.menu.pulang.path,
-                      onPressed: () {},
+                      onPressed: () {
+                        context.push(const AttendanceCheckoutPage());
+                      },
                     ),
                     MenuButton(
                       label: 'Izin',
